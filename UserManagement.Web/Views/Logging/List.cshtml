@@ -1,0 +1,73 @@
+﻿@model UserManagement.Web.Models.Logging.LogListViewModel
+
+@{
+    var maxFilterDate = DateTime.Now
+        .ToString("yyyy-MM-dd");
+}
+
+<h2>Change Logs</h2>
+<h4>@Model.FromDate.ToString("dd/MM/yyyy") - @Model.ToDate.ToString("dd/MM/yyyy")</h4>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Record Type</th>
+                <th>Date</th>
+                <th>Change Type</th>
+                <th>Changed Field Name</th>
+                <th>Previous Value</th>
+                <th>New Value</th>
+                <th style="width: 1px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                var existingLogParams = new Dictionary<string, string> { { "id", item.Id.ToString() } };
+
+                <tr>
+                    <td>
+                        @item.EntityName
+                    </td>
+                    <td>
+                        @item.Date.ToString("dd/MM/yyyy HH:mm:ss")
+                    </td>
+                    <td>
+                        @item.TypeName
+                    </td>
+                    <td>
+                        @item.PropertyName
+                    </td>
+                    <td>
+                        @item.OriginalValue
+                    </td>
+                    <td>
+                        @item.CurrentValue
+                    </td>
+                    <td>
+                        <a asp-controller="Logging" asp-action="ViewLog" asp-all-route-data="@existingLogParams" class="btn btn-default">View Log</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <Form asp-controller="Logging" asp-action="List" method="get">
+        <div class="row">
+            <div class="col-md-2">
+                <label class="labels">From Date</label>
+                <input type="date" asp-for="FromDate" class="form-control" max="@maxFilterDate" value="@Model.FromDate.ToString("yyyy-MM-dd")">
+            </div>
+            <div class="col-md-2">
+                <label class="labels">To Date</label>
+                <input type="date" asp-for="ToDate" class="form-control" max="@maxFilterDate" value="@Model.ToDate.ToString("yyyy-MM-dd")">
+            </div>
+            <div class="col-md-8">
+                <button type="submit" class="btn btn-primary float-end">Apply Date Filter</button>
+            </div>
+        </div>
+    </Form>
+</div>

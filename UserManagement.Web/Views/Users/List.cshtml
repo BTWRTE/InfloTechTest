@@ -1,5 +1,10 @@
 ﻿@model UserManagement.Web.Models.Users.UserListViewModel
 
+@{
+    var activeFilterParams = new Dictionary<string, string> { { "isActive", "true" } };
+    var inactiveFilterParams = new Dictionary<string, string> { { "isActive", "false" } };
+}
+
 <h2>User List</h2>
 
 <div class="table-responsive">
@@ -10,6 +15,7 @@
                 <th>Forename</th>
                 <th>Surname</th>
                 <th>Email</th>
+                <th>Date of Birth</th>
                 <th>Account Active</th>
                 <th style="width: 1px;"></th>
             </tr>
@@ -17,6 +23,8 @@
         <tbody>
             @foreach (var item in Model.Items)
             {
+                var existingUserParams = new Dictionary<string, string> { { "id", item.Id.ToString() ?? string.Empty } };
+
                 <tr>
                     <td>
                         @item.Id
@@ -31,6 +39,9 @@
                         @item.Email
                     </td>
                     <td>
+                        @item.DateOfBirth?.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
                         @(item.IsActive ? "Yes" : "No")
                     </td>
                     <td>
@@ -39,9 +50,13 @@
                                 Actions
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="btnToggleActions">
-                                <li><a class="dropdown-item" href="#">View</a></li>
-                                <li><a class="dropdown-item" href="#">Edit</a></li>
-                                <li><a class="dropdown-item" href="#">Delete</a></li>
+                                <li><a asp-controller="Users" asp-action="ViewUser" asp-all-route-data="@existingUserParams" class="dropdown-item">View</a></li>
+                                <li><a asp-controller="Users" asp-action="EditUser" asp-all-route-data="@existingUserParams" class="dropdown-item">Edit</a></li>
+                                <li>
+                                    <form asp-controller="Users" asp-action="DeleteUser" asp-all-route-data="@existingUserParams" method="post">
+                                        <button type="submit" class="dropdown-item">Delete</button>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                     </td>
@@ -54,12 +69,9 @@
 <div>
     <div class="btn-group" role="group">
         <a asp-controller="Users" asp-action="List" class="btn btn-default">Show All</a>
-        <a href="#" class="btn btn-default">Active Only</a>
-        <a href="#" class="btn btn-default">Non Active</a>
+        <a asp-controller="Users" asp-action="List" asp-all-route-data="activeFilterParams" class="btn btn-default">Active Only</a>
+        <a asp-controller="Users" asp-action="List" asp-all-route-data="inactiveFilterParams" class="btn btn-default">Non Active</a>
     </div>
 
-    <a href="#" class="btn btn-primary float-end">
-        Add User
-    </a>
+    <a asp-controller="Users" asp-action="NewUser" class="btn btn-primary float-end">Add User</a>
 </div>
-

@@ -1,0 +1,57 @@
+﻿@model UserManagement.Web.Models.Logging.UserLogViewModel
+
+@{
+    ViewBag.Title = "User Log";
+}
+
+<h2>User Log</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-11 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">User Profile Change Details</h4>
+                </div>
+                <div class="row mt-2 mb-5">
+                    <div class="col-md-6">
+                        <label class="labels">Current Name</label>
+                        <input type="text" asp-for="Fullname" class="form-control" disabled="true" value="@Model.Fullname">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="labels">Is This User Currently Active?</label>
+                        <input type="checkbox" asp-for="IsActive" class="form-check-input" disabled="true" checked="@Model.IsActive">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label class="labels">Change Type</label>
+                        <input type="email" asp-for="TypeName" class="form-control" disabled="true" value="@Model.TypeName">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label class="labels">Date of Change</label>
+                        <input type="date" asp-for="Date" class="form-control" disabled="true" value="@Model.Date.ToString("yyyy-MM-dd")">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label class="labels">Changed Field Name</label>
+                        <input type="email" asp-for="PropertyName" class="form-control" disabled="true" value="@Model.PropertyName">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label class="labels">Previous Value</label>
+                        <input type="text" asp-for="OriginalValue" class="form-control" disabled="true" value="@Model.OriginalValue">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="labels">New Value</label>
+                        <input type="text" asp-for="CurrentValue" class="form-control" disabled="true" value="@Model.CurrentValue">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,121 @@
+﻿@model UserManagement.Web.Models.Users.EditUserViewModel
+
+@{
+    var fullName = Model.User.Id != null
+        ? Model.User.Forename + " " + Model.User.Surname
+        : "New User";
+
+    var minBirthDate = DateTime.Now
+        .AddYears(-120)
+        .ToString("yyyy-MM-dd");
+
+    var maxBirthDate = DateTime.Now
+        .ToString("yyyy-MM-dd");
+
+    ViewBag.Title = fullName;
+}
+
+<h2>@fullName</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <img class="rounded-circle mt-5" width="150" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                <span class="font-weight-bold">@fullName</span>
+                <span class="text-black-50">@Model.User.Email</span>
+                <span> </span>
+            </div>
+        </div>
+        <div class="col-md-7 border-right">
+            <div class="p-3 py-5">
+                <form asp-controller="Users" asp-action="SetUser" method="post">
+                    <input type="number" asp-for="User.Id" class="form-control" readonly="true" hidden="true" value="@Model.User.Id">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Profile Settings</h4>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label class="labels">Name</label>
+                            <input type="text" asp-for="User.Forename" class="form-control" placeholder="forename" disabled="@(!Model.IsEditable)" value="@Model.User.Forename">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">Surname</label>
+                            <input type="text" asp-for="User.Surname" class="form-control" placeholder="surname" disabled="@(!Model.IsEditable)" value="@Model.User.Surname">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels">Email Address</label>
+                            <input type="email" asp-for="User.Email" class="form-control" placeholder="email address" disabled="@(!Model.IsEditable)" value="@Model.User.Email">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels">Date of Birth</label>
+                            <input type="date" asp-for="User.DateOfBirth" class="form-control" min="@minBirthDate" max="@maxBirthDate" disabled="@(!Model.IsEditable)" value="@Model.User.DateOfBirth?.ToString("yyyy-MM-dd")">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels">Is This User Active?</label>
+                            <input type="checkbox" asp-for="User.IsActive" class="form-check-input" disabled="@(!Model.IsEditable)" checked="@Model.User.IsActive">
+                        </div>
+                    </div>
+                    @if (Model.IsEditable)
+                    {
+                        <div class="mt-5 validation">
+                            <div asp-validation-summary="All"></div>
+                        </div>
+
+                        <div class="mt-5 text-center">
+                            <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
+                        </div>
+                    }
+                    @if (!Model.IsEditable)
+                    {
+                        <div class="mt-5">
+                            <h4 class="text-right">Change Logs</h4>
+
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Change Type</th>
+                                            <th>Changed Field Name</th>
+                                            <th>Previous Value</th>
+                                            <th>New Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Logs.Items)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.Date.ToString("dd/MM/yyyy")
+                                                </td>
+                                                <td>
+                                                    @item.TypeName
+                                                </td>
+                                                <td>
+                                                    @item.PropertyName
+                                                </td>
+                                                <td>
+                                                    @item.OriginalValue
+                                                </td>
+                                                <td>
+                                                    @item.CurrentValue
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

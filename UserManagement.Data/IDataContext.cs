@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using UserManagement.Models;
 
 namespace UserManagement.Data;
 
@@ -10,7 +11,15 @@ public interface IDataContext
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <returns></returns>
-    IQueryable<TEntity> GetAll<TEntity>() where TEntity : class;
+    IQueryable<TEntity> GetAll<TEntity>() where TEntity : BaseEntity;
+
+    /// <summary>
+    /// Return an item by Id
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task<TEntity?> Get<TEntity>(long id) where TEntity : BaseEntity;
 
     /// <summary>
     /// Create a new item
@@ -18,7 +27,7 @@ public interface IDataContext
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="entity"></param>
     /// <returns></returns>
-    void Create<TEntity>(TEntity entity) where TEntity : class;
+    Task<TEntity> Create<TEntity>(TEntity entity) where TEntity : BaseEntity;
 
     /// <summary>
     /// Uodate an existing item matching the ID
@@ -26,7 +35,7 @@ public interface IDataContext
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="entity"></param>
     /// <returns></returns>
-    void Update<TEntity>(TEntity entity) where TEntity : class;
+    Task<TEntity> Update<TEntity>(TEntity entity) where TEntity : BaseEntity;
 
-    void Delete<TEntity>(TEntity entity) where TEntity : class;
+    Task Delete<TEntity>(TEntity entity) where TEntity : BaseEntity;
 }
